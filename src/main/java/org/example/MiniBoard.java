@@ -23,11 +23,15 @@ public class MiniBoard {
         this.place(row, col, player);
     }
 
+    protected MiniBoard(int[] board) { //used for testing
+        this.board = board;
+    }
+
     public MiniBoard place(int row, int col, int player) {
         if (board[row * 3 + col] == 0) {
             board[row * 3 + col] = player;
         } else {
-            throw new UnsupportedOperationException("There is already a peice in that square.");
+            throw new UnsupportedOperationException("There is already a piece in that square.");
         }
         return this;
     }

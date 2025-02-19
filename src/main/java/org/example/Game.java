@@ -138,6 +138,6 @@ public class Game {
         }
         System.out.println("|||||||||||||||||||||||||||");
         gameBoard.print();
-        System.out.printf("WINNER: %d\n", gameBoard.winner());
+        System.out.printf("WINNER: Player %d\n", gameBoard.winner());
     }
 }

@@ -1,12 +1,16 @@
-package org.example;
+package org.example.ai;
+
+import org.example.Ultimate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Minimax {
+public class Minimax implements CPU<Ultimate> {
 
     private int player;
+    private ArrayList<Integer> cpuEvaluationsPerMove = new ArrayList<>();
+
     private int tableUses = 0;
     private HashMap<Integer, Entry> tt = new HashMap<Integer, Entry>();
     private Scanner scan = new Scanner(System.in);
@@ -89,6 +93,23 @@ public class Minimax {
         return eval;
 
     }
+
+    public Ultimate search(Ultimate state, int depth, int player) {
+        ArrayList<Ultimate> a = state.generateMoves(player);
+        int highestIndex = 0;
+        int highestScore = -1000000;
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < a.size(); i ++) {
+            int score = this.minimax(a.get(i), depth, false);
+            if (score > highestScore) {
+                highestScore = score;
+                highestIndex = i;
+            }
+        }
+        cpuEvaluationsPerMove.add(highestScore);
+        return a.get(highestIndex);
+    }
+
 
     public int minimax(Ultimate node, int depth, boolean isMaximizingPlayer) {
         if (depth == 0 || node.winner() != 0 || node.isAllFull()) {
@@ -248,5 +269,9 @@ public class Minimax {
         }
 
         return g;
+    }
+
+    public int getLatestEvaluation() {
+        return cpuEvaluationsPerMove.get(cpuEvaluationsPerMove.size()-1);
     }
 }

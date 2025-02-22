@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.ai.*;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,8 +11,8 @@ public class Game {
     private boolean player1;
     private boolean player2;
     private Ultimate gameBoard = new Ultimate();
-    private Minimax bonnie = new Minimax(1);
-    private Minimax clyde = new Minimax(2);
+    private CPU<Ultimate> bonnie = new AlphaBeta(1);
+    private CPU<Ultimate> clyde = new AlphaBeta(2);
 
     public static void main(String[] args) {
         Game g = new Game(true, false);
@@ -34,7 +36,7 @@ public class Game {
 
     public void play() {
 
-        int depth = 7;
+        int depth = 8;
         Scanner scan = new Scanner(System.in);
         int move = 0;
 
@@ -72,24 +74,11 @@ public class Game {
             }
             else {
                 //if player1 is an AI
-                ArrayList<Ultimate> a = gameBoard.generateMoves(1);
-                bonnie.clearTableUses();
-                int highestIndex = 0;
-                int highestScore = -100000;
                 long start = System.currentTimeMillis();
-                for (int i = 0; i < a.size(); i ++) {
-                    int score = bonnie.alphabetaTT(a.get(i), depth, -100000, 100000, false);
-                    //System.out.printf("Player 1 Table Uses: %d\n",bonnie.getTableUses());
-                    if (score > highestScore) {
-                        highestScore = score;
-                        highestIndex = i;
-                    }
-                }
+                gameBoard = bonnie.search(gameBoard, depth, 1);
                 long time = System.currentTimeMillis() - start;
-                System.out.printf("Player 1 Time: %f\n", time/1000.0);
+                System.out.printf("Player 1 AI Time: %f | Evaluated Board Score: %d\n", time/1000.0, bonnie.getLatestEvaluation());
                 System.out.printf("Move: %d\n", move);
-                System.out.printf("Player 1 AI: %d\n", highestScore);
-                gameBoard = a.get(highestIndex);
                 gameBoard.print();
 
                 if (gameBoard.winner() == 1 || gameBoard.isAllFull()) {
@@ -120,20 +109,10 @@ public class Game {
             }
             else {
                 //if player2 is AI
-                ArrayList<Ultimate> a = gameBoard.generateMoves(2);
-                clyde.clearTableUses();
-                int highestIndex = 0;
-                int highestScore = -100000;
-                for (int i = 0; i < a.size(); i ++) {
-                    int score = clyde.MTD(a.get(i), clyde.alphabetaTT(a.get(i), 5, -100000, 100000, false), 20);
-                    if (score > highestScore) {
-                        highestScore = score;
-                        highestIndex = i;
-                    }
-                    //System.out.printf("Player 2 Table Uses: %d\n", clyde.getTableUses());
-                }
-                System.out.printf("Player 2 AI: %d\n", highestScore);
-                gameBoard = a.get(highestIndex);
+                long start = System.currentTimeMillis();
+                gameBoard = clyde.search(gameBoard, depth, 2);
+                long time = System.currentTimeMillis() - start;
+                System.out.printf("Player 2 AI Time: %f | Evaluated Board Score: %d\n", time/1000.0, clyde.getLatestEvaluation());
             }
         }
         System.out.println("|||||||||||||||||||||||||||");

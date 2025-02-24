@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Ultimate {
 
     private MiniBoard[] bigBoard = new MiniBoard[9];
-    private int boardInPlay;
+    protected int boardInPlay;
     private int storedValue;
 
     //constructs a default ultimate board with board in play = -1 and each miniBoard initialized blank
@@ -176,6 +176,10 @@ public class Ultimate {
     //returns the ultimate board
     public MiniBoard[] getBigBoard() {
         return bigBoard;
+    }
+
+    public MiniBoard getMiniBoard(int index) {
+        return bigBoard[index];
     }
 
     //sums all the numbers of open 2 in a rows for a given player over all boards

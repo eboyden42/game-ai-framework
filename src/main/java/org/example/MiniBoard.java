@@ -209,6 +209,15 @@ public class MiniBoard {
         return ' ';
     }
 
+    public boolean isBlank() {
+        for (int i = 0; i < board.length; i ++) {
+            if (board[i] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

@@ -7,12 +7,13 @@ import java.util.Arrays;
 import java.util.Objects;
 
 
-public class Ultimate implements Comparable<Ultimate> {
+public class Ultimate {
 
     private MiniBoard[] bigBoard = new MiniBoard[9];
     private int boardInPlay;
     private int storedValue;
 
+    //constructs a default ultimate board with board in play = -1 and each miniBoard initialized blank
     public Ultimate() {
         boardInPlay = -1;
         for (int i = 0; i < bigBoard.length; i ++) {
@@ -20,6 +21,7 @@ public class Ultimate implements Comparable<Ultimate> {
         }
     }
 
+    //constructs a board based on a previous board, with an additional move added
     public Ultimate(MiniBoard[] bigBoard2, int index, int row, int col, int player) {
         boardInPlay = -1;
         for (int i = 0; i < bigBoard.length; i ++) {
@@ -33,36 +35,7 @@ public class Ultimate implements Comparable<Ultimate> {
         this.place(index, row, col, player);
     }
 
-
-    //sets natural order to the greatest static evaluation with positive being player 1
-    public int compareTo(Ultimate other) {
-        int positivePlayer = 1;
-        return this.evaluate(positivePlayer)-other.evaluate(positivePlayer);
-    }
-
-    public int evaluate(int player) {
-        Minimax m = new Minimax(player);
-        return m.evaluate(this);
-    }
-
-    public static void main(String[] args) {
-        Ultimate u1 = new Ultimate();
-        Ultimate u2 = new Ultimate();
-
-        u1.setBigWinner(0, 1);
-        u1.setBigWinner(1, 1);
-        u1.setBigWinner(2, 2);
-        u1.setBigWinner(3, 2);
-        u1.setBigWinner(4, 2);
-        u1.setBigWinner(5, 1);
-        u1.setBigWinner(6, 1);
-        u1.setBigWinner(7, 1);
-        u1.setBigWinner(8, 2);
-
-        u1.print();
-        System.out.println(u1.winner());
-    }
-
+    //prints out the board to terminal
     public void print() {
         for (int start = 0; start < 9; start += 3) {
             for (int level = 0; level < 3; level ++) {
@@ -80,6 +53,8 @@ public class Ultimate implements Comparable<Ultimate> {
         }
     }
 
+    //places a piece given the bigBoard index [0, 8], and two row and col numbers both [0, 2]
+    //also updates the board in play based on the placement of the piece
     public Ultimate place(int bigIndex, int row, int col, int player) {
 
         bigBoard[bigIndex].place(row, col, player);
@@ -95,6 +70,9 @@ public class Ultimate implements Comparable<Ultimate> {
         return this;
     }
 
+    //given a certain move determine if it is possible namely
+    // 1. the location that the piece will be placed is in the board in play, or there is no restriction (boardInPlay) == -1
+    // 2. the location does not already have a piece placed there
     public boolean isMovePossible(int index, int row, int col) {
         if (index == boardInPlay || boardInPlay == -1) {
             if (bigBoard[index].getBoard()[row*3+col] == 0) {
@@ -104,6 +82,7 @@ public class Ultimate implements Comparable<Ultimate> {
         return false;
     }
 
+    //returns an arraylist of Ultimate states for each possible move that can be made from the current board state
     public ArrayList<Ultimate> generateMoves(int player) {
         ArrayList<Ultimate> moves = new ArrayList<Ultimate>();
 
@@ -135,6 +114,10 @@ public class Ultimate implements Comparable<Ultimate> {
         return moves;
     }
 
+    //determines if there is a winner for the game
+    // 0 if there is no winner
+    // 1 if player 1 has won
+    // 2 if player 2 has won
     public int winner() {
         int rowProduct = 1;
         int[] colProducts = {1, 1, 1};
@@ -190,10 +173,12 @@ public class Ultimate implements Comparable<Ultimate> {
         return 0;
     }
 
+    //returns the ultimate board
     public MiniBoard[] getBigBoard() {
         return bigBoard;
     }
 
+    //sums all the numbers of open 2 in a rows for a given player over all boards
     public int numberOfTwos(int player) {
         int num = 0;
         for (int i = 0; i < bigBoard.length; i ++) {
@@ -202,6 +187,7 @@ public class Ultimate implements Comparable<Ultimate> {
         return num;
     }
 
+    //sums the number of boards that a player has won so far
     public int numberOfThrees(int player) {
         int num = 0;
         for (int i = 0; i < bigBoard.length; i ++) {
@@ -212,6 +198,10 @@ public class Ultimate implements Comparable<Ultimate> {
         return num;
     }
 
+    //sums the number of open 2s that exist in the ultimate board
+    // idea: maybe use a function that determines if a player can still possibly win a board to refine this
+    // evaluation. the idea is that the winner could == 0 but there are cases where the player cannot win that
+    // board so points should not be added in this case.
     public int numberOfBigTwos(int player) {
         int num = 0;
         for (int i = 0; i < 6; i +=3) {
@@ -261,6 +251,7 @@ public class Ultimate implements Comparable<Ultimate> {
         return num;
     }
 
+    //checks if all miniboards int the big board are full
     public boolean isAllFull() {
         for (int i = 0; i < bigBoard.length; i ++) {
             if (!bigBoard[i].isBoardFull()) {
@@ -270,6 +261,7 @@ public class Ultimate implements Comparable<Ultimate> {
         return true;
     }
 
+    //stored value functions for possible transposition table functionality
     public int getStoredValue() {
         return storedValue;
     }
@@ -278,10 +270,12 @@ public class Ultimate implements Comparable<Ultimate> {
         this.storedValue = storedValue;
     }
 
+    //returns an integer representing the board in play, -1 means there are no restrictions
     public int getBoardInPlay() {
         return boardInPlay;
     }
 
+    //updates the miniboards based on if someone has won them or not
     public void update() {
         for (int i = 0; i < bigBoard.length; i ++) {
             int win = bigBoard[i].winner();
@@ -291,6 +285,7 @@ public class Ultimate implements Comparable<Ultimate> {
         }
     }
 
+    //wrapper to set a winner manually for one of the miniboards
     public void setBigWinner(int board, int player) {
         bigBoard[board].setWinner(player);
     }

@@ -146,6 +146,188 @@ public class UltimateTest {
         assertEquals(8, moves.size(), "Should generate 8 moves since one space is occupied.");
     }
 
+    @Test
+    public void testWinnerWhenNoOneHasWon() {
+        // No moves made, so there should be no winner
+        assertEquals(0, ultimate.winner(), "There should be no winner initially.");
+    }
 
+    @Test
+    public void testWinnerForPlayer1() {
+        // Player 1 wins with a horizontal row on the big board (e.g., MiniBoards [0, 1, 2] are won by Player 1)
 
+        // Simulate Player 1 winning in MiniBoards [0, 1, 2]
+        ultimate.getBigBoard()[0].setWinner(1);
+        ultimate.getBigBoard()[4].setWinner(1);
+        ultimate.getBigBoard()[8].setWinner(1);
+
+        // Player 1 should win the game
+        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer1_Diagonal_TopRightToBottomLeft() {
+        // Player 1 wins on the diagonal from top-right to bottom-left
+        ultimate.getBigBoard()[2].setWinner(1);
+        ultimate.getBigBoard()[4].setWinner(1);
+        ultimate.getBigBoard()[6].setWinner(1);
+
+        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer1_Horizontal_TopRow() {
+        // Player 1 wins in the top row
+        ultimate.getBigBoard()[0].setWinner(1);
+        ultimate.getBigBoard()[1].setWinner(1);
+        ultimate.getBigBoard()[2].setWinner(1);
+
+        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer1_Horizontal_MiddleRow() {
+        // Player 1 wins in the middle row
+        ultimate.getBigBoard()[3].setWinner(1);
+        ultimate.getBigBoard()[4].setWinner(1);
+        ultimate.getBigBoard()[5].setWinner(1);
+
+        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer1_Horizontal_BottomRow() {
+        // Player 1 wins in the bottom row
+        ultimate.getBigBoard()[6].setWinner(1);
+        ultimate.getBigBoard()[7].setWinner(1);
+        ultimate.getBigBoard()[8].setWinner(1);
+
+        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer1_Vertical_LeftColumn() {
+        // Player 1 wins in the left column
+        ultimate.getBigBoard()[0].setWinner(1);
+        ultimate.getBigBoard()[3].setWinner(1);
+        ultimate.getBigBoard()[6].setWinner(1);
+
+        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer1_Vertical_MiddleColumn() {
+        // Player 1 wins in the middle column
+        ultimate.getBigBoard()[1].setWinner(1);
+        ultimate.getBigBoard()[4].setWinner(1);
+        ultimate.getBigBoard()[7].setWinner(1);
+
+        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer1_Vertical_RightColumn() {
+        // Player 1 wins in the right column
+        ultimate.getBigBoard()[2].setWinner(1);
+        ultimate.getBigBoard()[5].setWinner(1);
+        ultimate.getBigBoard()[8].setWinner(1);
+
+        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer2_Diagonal_TopLeftToBottomRight() {
+        // Player 2 wins on the diagonal from top-left to bottom-right
+        ultimate.getBigBoard()[0].setWinner(2);
+        ultimate.getBigBoard()[4].setWinner(2);
+        ultimate.getBigBoard()[8].setWinner(2);
+
+        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer2_Diagonal_TopRightToBottomLeft() {
+        // Player 2 wins on the diagonal from top-right to bottom-left
+        ultimate.getBigBoard()[2].setWinner(2);
+        ultimate.getBigBoard()[4].setWinner(2);
+        ultimate.getBigBoard()[6].setWinner(2);
+
+        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer2_Horizontal_TopRow() {
+        // Player 2 wins in the top row
+        ultimate.getBigBoard()[0].setWinner(2);
+        ultimate.getBigBoard()[1].setWinner(2);
+        ultimate.getBigBoard()[2].setWinner(2);
+
+        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer2_Horizontal_MiddleRow() {
+        // Player 2 wins in the middle row
+        ultimate.getBigBoard()[3].setWinner(2);
+        ultimate.getBigBoard()[4].setWinner(2);
+        ultimate.getBigBoard()[5].setWinner(2);
+
+        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer2_Horizontal_BottomRow() {
+        // Player 2 wins in the bottom row
+        ultimate.getBigBoard()[6].setWinner(2);
+        ultimate.getBigBoard()[7].setWinner(2);
+        ultimate.getBigBoard()[8].setWinner(2);
+
+        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer2_Vertical_LeftColumn() {
+        // Player 2 wins in the left column
+        ultimate.getBigBoard()[0].setWinner(2);
+        ultimate.getBigBoard()[3].setWinner(2);
+        ultimate.getBigBoard()[6].setWinner(2);
+
+        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer2_Vertical_MiddleColumn() {
+        // Player 2 wins in the middle column
+        ultimate.getBigBoard()[1].setWinner(2);
+        ultimate.getBigBoard()[4].setWinner(2);
+        ultimate.getBigBoard()[7].setWinner(2);
+
+        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerForPlayer2_Vertical_RightColumn() {
+        // Player 2 wins in the right column
+        ultimate.getBigBoard()[2].setWinner(2);
+        ultimate.getBigBoard()[5].setWinner(2);
+        ultimate.getBigBoard()[8].setWinner(2);
+
+        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+    }
+
+    @Test
+    public void testWinnerWhenNoWinner() {
+        // Ensure no winner when no three-in-a-row is formed
+        ultimate.getBigBoard()[0].setWinner(2);
+        ultimate.getBigBoard()[1].setWinner(1);
+        ultimate.getBigBoard()[2].setWinner(2);
+        ultimate.getBigBoard()[3].setWinner(2);
+        ultimate.getBigBoard()[4].setWinner(1);
+        ultimate.getBigBoard()[5].setWinner(2);
+        ultimate.getBigBoard()[6].setWinner(1);
+        ultimate.getBigBoard()[7].setWinner(2);
+        ultimate.getBigBoard()[8].setWinner(1);
+
+        assertEquals(0, ultimate.winner(), "There should be no winner.");
+    }
 }

@@ -1,6 +1,8 @@
 package org.example;
 import org.example.game.*;
 import org.example.ai.*;
+
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Play<M> {
@@ -31,6 +33,16 @@ public class Play<M> {
     }
 
     private void humanMove() {
+        Optional<M> humanMove = gameState.getPlayerInputMove();
+        while (humanMove.isEmpty()) {
+            humanMove = gameState.getPlayerInputMove();
+        }
+
+        gameState = gameState.applyMove(humanMove.get());
+
+        //old code i might use this later
+        /*
+
         System.out.println("Your turn! Available moves: " + gameState.getPossibleMoves());
         System.out.print("Enter your move: ");
 
@@ -49,6 +61,8 @@ public class Play<M> {
         }
 
         gameState = gameState.applyMove(move);
+
+         */
     }
 
     private void cpuMove() {
@@ -62,16 +76,11 @@ public class Play<M> {
         int winner = gameState.evaluateWinner(); // Assume this method returns the winner
         if (winner == 1) {
             System.out.println("Congratulations! You win! 🎉");
-        } else if (winner == -1) {
-            System.out.println("CPU wins! Better luck next time. 🤖");
-        } else {
+        } else if (winner == 0) {
             System.out.println("It's a draw! 🤝");
+        } else {
+            System.out.printf("CPU (player %d) wins! Better luck next time. 🤖\n", winner);
         }
-    }
-
-    private M parseMove(String input) {
-        // Convert user input to an M type move (assumes integer moves for simplicity)
-        return (M) Integer.valueOf(input);
     }
 }
 

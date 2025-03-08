@@ -1,8 +1,8 @@
 package org.example;
 
 import org.example.ai.*;
+import org.example.game.Ultimate;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
@@ -113,6 +113,9 @@ public class Game {
                 gameBoard = clyde.search(gameBoard, depth, 2);
                 long time = System.currentTimeMillis() - start;
                 System.out.printf("Player 2 AI Time: %f | Evaluated Board Score: %d\n", time/1000.0, clyde.getLatestEvaluation());
+                if (!player1) {
+                    gameBoard.print();
+                }
             }
         }
         System.out.println("|||||||||||||||||||||||||||");

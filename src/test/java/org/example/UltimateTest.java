@@ -1,6 +1,7 @@
 package org.example;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.example.game.MiniBoard;
+import org.example.game.Ultimate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -89,14 +90,14 @@ public class UltimateTest {
     @Test
     public void testMovePossibleWhenBoardInPlayIsNegativeOne() {
         // When boardInPlay is -1, any move should be possible in an empty space
-        ultimate.boardInPlay = -1;
+        ultimate.setBoardInPlay(-1);
         assertTrue(ultimate.isMovePossible(0, 1, 1), "Move should be possible when boardInPlay is -1 and space is empty");
     }
 
     @Test
     public void testMovePossibleWhenBoardInPlayMatchesIndex() {
         // Set boardInPlay to 2, meaning the move must be in miniBoard[2]
-        ultimate.boardInPlay = 2;
+        ultimate.setBoardInPlay(2);
         assertTrue(ultimate.isMovePossible(2, 0, 0), "Move should be possible in board 2");
         assertFalse(ultimate.isMovePossible(3, 0, 0), "Move should not be possible in board 3");
     }
@@ -107,7 +108,7 @@ public class UltimateTest {
         ultimate.place(2, 0, 0, 1);
 
         // Set boardInPlay to 2
-        ultimate.boardInPlay = 2;
+        ultimate.setBoardInPlay(2);
 
         // Move should not be possible in (0,0) of board 2 since it's occupied
         assertFalse(ultimate.isMovePossible(2, 0, 0), "Move should not be possible if the space is already occupied");
@@ -116,7 +117,7 @@ public class UltimateTest {
     @Test
     public void testGenerateMovesWhenBoardInPlayIsNegativeOne() {
         // When boardInPlay is -1, all empty spaces in all miniBoards should generate moves
-        ultimate.boardInPlay = -1;
+        ultimate.setBoardInPlay(-1);
 
         ArrayList<Ultimate> moves = ultimate.generateMoves(1);
 
@@ -127,7 +128,7 @@ public class UltimateTest {
     @Test
     public void testGenerateMovesWhenBoardInPlayIsRestricted() {
         // Set boardInPlay to 3, so moves should only be generated in MiniBoard[3]
-        ultimate.boardInPlay = 3;
+        ultimate.setBoardInPlay(3);
 
         ArrayList<Ultimate> moves = ultimate.generateMoves(2);
 

@@ -1,8 +1,7 @@
 package org.example.ai;
 
-import org.example.Ultimate;
+import org.example.game.Ultimate;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AlphaBeta implements CPU<Ultimate> {

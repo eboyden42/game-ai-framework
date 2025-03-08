@@ -1,6 +1,4 @@
-package org.example;
-
-import org.example.ai.Minimax;
+package org.example.game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -272,6 +270,10 @@ public class Ultimate {
 
     public void setStoredValue(int storedValue) {
         this.storedValue = storedValue;
+    }
+
+    public void setBoardInPlay(int boardInPlay) {
+        this.boardInPlay = boardInPlay;
     }
 
     //returns an integer representing the board in play, -1 means there are no restrictions

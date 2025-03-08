@@ -1,6 +1,6 @@
 package org.example;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.example.game.MiniBoard;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

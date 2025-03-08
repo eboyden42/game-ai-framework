@@ -1,6 +1,6 @@
 package org.example.ai;
 
-import org.example.Ultimate;
+import org.example.game.Ultimate;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -62,7 +62,7 @@ public class UltimateTest {
     @Test
     public void testPlaceUpdatesMiniBoardAndBoardInPlay() {
         // Player 1 places a piece in board index 0, at row 1, col 1
-        ultimate.place(0, 1, 1, 1);
+        ultimate.applyMove(0, 1, 1, 1);
 
         // Ensure the move was placed correctly
         assertEquals(1, ultimate.getMiniBoard(0).getBoard()[4], "Player 1's move should be at (1,1) in board 0");
@@ -81,7 +81,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[4] = fullBoard;
 
         // Place a move that would normally send play to board 4
-        ultimate.place(0, 1, 1, 2);
+        ultimate.applyMove(0, 1, 1, 2);
 
         // Since board 4 is full, boardInPlay should be -1
         assertEquals(-1, ultimate.getBoardInPlay(), "boardInPlay should be -1 if the next board is full");
@@ -105,7 +105,7 @@ public class UltimateTest {
     @Test
     public void testMoveNotPossibleWhenSpotIsTaken() {
         // Place a piece at (0,0) in board 2
-        ultimate.place(2, 0, 0, 1);
+        ultimate.applyMove(2, 0, 0, 1);
 
         // Set boardInPlay to 2
         ultimate.setBoardInPlay(2);
@@ -119,7 +119,7 @@ public class UltimateTest {
         // When boardInPlay is -1, all empty spaces in all miniBoards should generate moves
         ultimate.setBoardInPlay(-1);
 
-        ArrayList<Ultimate> moves = ultimate.generateMoves(1);
+        ArrayList<Ultimate> moves = ultimate.getPossibleMoves(1);
 
         // There are 9 boards, each with 9 spaces = 81 total possible moves initially
         assertEquals(81, moves.size(), "Should generate 81 possible moves for an empty board.");
@@ -130,7 +130,7 @@ public class UltimateTest {
         // Set boardInPlay to 3, so moves should only be generated in MiniBoard[3]
         ultimate.setBoardInPlay(3);
 
-        ArrayList<Ultimate> moves = ultimate.generateMoves(2);
+        ArrayList<Ultimate> moves = ultimate.getPossibleMoves(2);
 
         // Only 9 possible moves should be generated from MiniBoard[3]
         assertEquals(9, moves.size(), "Should generate 9 moves for board 3.");
@@ -139,9 +139,9 @@ public class UltimateTest {
     @Test
     public void testGenerateMovesWithOccupiedSpaces() {
         // Set boardInPlay to 4 and place a piece in the center of MiniBoard[4]
-        ultimate.place(4, 1, 1, 1);
+        ultimate.applyMove(4, 1, 1, 1);
 
-        ArrayList<Ultimate> moves = ultimate.generateMoves(2);
+        ArrayList<Ultimate> moves = ultimate.getPossibleMoves(2);
 
         // Since (1,1) is occupied, there should be 8 moves instead of 9
         assertEquals(8, moves.size(), "Should generate 8 moves since one space is occupied.");
@@ -150,7 +150,7 @@ public class UltimateTest {
     @Test
     public void testWinnerWhenNoOneHasWon() {
         // No moves made, so there should be no winner
-        assertEquals(0, ultimate.winner(), "There should be no winner initially.");
+        assertEquals(0, ultimate.evaluateWinner(), "There should be no winner initially.");
     }
 
     @Test
@@ -163,7 +163,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[8].setWinner(1);
 
         // Player 1 should win the game
-        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+        assertEquals(1, ultimate.evaluateWinner(), "Player 1 should be the winner.");
     }
 
     @Test
@@ -173,7 +173,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[4].setWinner(1);
         ultimate.getBigBoard()[6].setWinner(1);
 
-        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+        assertEquals(1, ultimate.evaluateWinner(), "Player 1 should be the winner.");
     }
 
     @Test
@@ -183,7 +183,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[1].setWinner(1);
         ultimate.getBigBoard()[2].setWinner(1);
 
-        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+        assertEquals(1, ultimate.evaluateWinner(), "Player 1 should be the winner.");
     }
 
     @Test
@@ -193,7 +193,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[4].setWinner(1);
         ultimate.getBigBoard()[5].setWinner(1);
 
-        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+        assertEquals(1, ultimate.evaluateWinner(), "Player 1 should be the winner.");
     }
 
     @Test
@@ -203,7 +203,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[7].setWinner(1);
         ultimate.getBigBoard()[8].setWinner(1);
 
-        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+        assertEquals(1, ultimate.evaluateWinner(), "Player 1 should be the winner.");
     }
 
     @Test
@@ -213,7 +213,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[3].setWinner(1);
         ultimate.getBigBoard()[6].setWinner(1);
 
-        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+        assertEquals(1, ultimate.evaluateWinner(), "Player 1 should be the winner.");
     }
 
     @Test
@@ -223,7 +223,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[4].setWinner(1);
         ultimate.getBigBoard()[7].setWinner(1);
 
-        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+        assertEquals(1, ultimate.evaluateWinner(), "Player 1 should be the winner.");
     }
 
     @Test
@@ -233,7 +233,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[5].setWinner(1);
         ultimate.getBigBoard()[8].setWinner(1);
 
-        assertEquals(1, ultimate.winner(), "Player 1 should be the winner.");
+        assertEquals(1, ultimate.evaluateWinner(), "Player 1 should be the winner.");
     }
 
     @Test
@@ -243,7 +243,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[4].setWinner(2);
         ultimate.getBigBoard()[8].setWinner(2);
 
-        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+        assertEquals(2, ultimate.evaluateWinner(), "Player 2 should be the winner.");
     }
 
     @Test
@@ -253,7 +253,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[4].setWinner(2);
         ultimate.getBigBoard()[6].setWinner(2);
 
-        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+        assertEquals(2, ultimate.evaluateWinner(), "Player 2 should be the winner.");
     }
 
     @Test
@@ -263,7 +263,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[1].setWinner(2);
         ultimate.getBigBoard()[2].setWinner(2);
 
-        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+        assertEquals(2, ultimate.evaluateWinner(), "Player 2 should be the winner.");
     }
 
     @Test
@@ -273,7 +273,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[4].setWinner(2);
         ultimate.getBigBoard()[5].setWinner(2);
 
-        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+        assertEquals(2, ultimate.evaluateWinner(), "Player 2 should be the winner.");
     }
 
     @Test
@@ -283,7 +283,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[7].setWinner(2);
         ultimate.getBigBoard()[8].setWinner(2);
 
-        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+        assertEquals(2, ultimate.evaluateWinner(), "Player 2 should be the winner.");
     }
 
     @Test
@@ -293,7 +293,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[3].setWinner(2);
         ultimate.getBigBoard()[6].setWinner(2);
 
-        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+        assertEquals(2, ultimate.evaluateWinner(), "Player 2 should be the winner.");
     }
 
     @Test
@@ -303,7 +303,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[4].setWinner(2);
         ultimate.getBigBoard()[7].setWinner(2);
 
-        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+        assertEquals(2, ultimate.evaluateWinner(), "Player 2 should be the winner.");
     }
 
     @Test
@@ -313,7 +313,7 @@ public class UltimateTest {
         ultimate.getBigBoard()[5].setWinner(2);
         ultimate.getBigBoard()[8].setWinner(2);
 
-        assertEquals(2, ultimate.winner(), "Player 2 should be the winner.");
+        assertEquals(2, ultimate.evaluateWinner(), "Player 2 should be the winner.");
     }
 
     @Test
@@ -329,6 +329,6 @@ public class UltimateTest {
         ultimate.getBigBoard()[7].setWinner(2);
         ultimate.getBigBoard()[8].setWinner(1);
 
-        assertEquals(0, ultimate.winner(), "There should be no winner.");
+        assertEquals(0, ultimate.evaluateWinner(), "There should be no winner.");
     }
 }

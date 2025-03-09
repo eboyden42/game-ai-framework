@@ -18,7 +18,7 @@ public class Play<M> {
 
     public void start() {
         System.out.println("Game Start!");
-        gameState.printState(); // Assume the GameState interface has a print method
+        gameState.print(); // Assume the GameState interface has a print method
 
         while (!gameState.isTerminal()) {
             if (gameState.getCurrentPlayer() == 1) {
@@ -26,7 +26,7 @@ public class Play<M> {
             } else {
                 cpuMove();
             }
-            gameState.printState();
+            gameState.print();
         }
 
         announceResult();
@@ -39,30 +39,6 @@ public class Play<M> {
         }
 
         gameState = gameState.applyMove(humanMove.get());
-
-        //old code i might use this later
-        /*
-
-        System.out.println("Your turn! Available moves: " + gameState.getPossibleMoves());
-        System.out.print("Enter your move: ");
-
-        M move = null;
-        while (move == null) {
-            try {
-                String input = scanner.nextLine();
-                move = parseMove(input);
-                if (!gameState.getPossibleMoves().contains(move)) {
-                    throw new IllegalArgumentException("Invalid move! Try again.");
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                move = null;
-            }
-        }
-
-        gameState = gameState.applyMove(move);
-
-         */
     }
 
     private void cpuMove() {
@@ -75,11 +51,11 @@ public class Play<M> {
     private void announceResult() {
         int winner = gameState.evaluateWinner(); // Assume this method returns the winner
         if (winner == 1) {
-            System.out.println("Congratulations! You win! 🎉");
+            System.out.println("Congratulations! You win!");
         } else if (winner == 0) {
-            System.out.println("It's a draw! 🤝");
+            System.out.println("It's a draw!");
         } else {
-            System.out.printf("CPU (player %d) wins! Better luck next time. 🤖\n", winner);
+            System.out.printf("CPU (player %d) wins! Better luck next time.\n", winner);
         }
     }
 }

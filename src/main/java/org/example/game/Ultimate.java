@@ -1,15 +1,13 @@
 package org.example.game;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
+import java.io.*;
+import java.util.*;
 
-
-public class Ultimate {
+public class Ultimate implements GameState<UltimateMove>, Serializable {
 
     private MiniBoard[] bigBoard = new MiniBoard[9];
-    protected int boardInPlay;
-    private int storedValue;
+    private int boardInPlay;
+    private int currentPlayer = 1;
 
     //constructs a default ultimate board with board in play = -1 and each miniBoard initialized blank
     public Ultimate() {
@@ -20,7 +18,7 @@ public class Ultimate {
     }
 
     //constructs a board based on a previous board, with an additional move added
-    public Ultimate(MiniBoard[] bigBoard2, int index, int row, int col, int player) {
+    public Ultimate(MiniBoard[] bigBoard2, int index, int row, int col) {
         boardInPlay = -1;
         for (int i = 0; i < bigBoard.length; i ++) {
             bigBoard[i] = new MiniBoard();
@@ -30,7 +28,7 @@ public class Ultimate {
                 bigBoard[i].getBoard()[n] = bigBoard2[i].getBoard()[n];
             }
         }
-        this.place(index, row, col, player);
+        this.applyMove(new UltimateMove(index, row, col));
     }
 
     //prints out the board to terminal
@@ -53,19 +51,46 @@ public class Ultimate {
 
     //places a piece given the bigBoard index [0, 8], and two row and col numbers both [0, 2]
     //also updates the board in play based on the placement of the piece
-    public Ultimate place(int bigIndex, int row, int col, int player) {
+    public Ultimate applyMove(UltimateMove move) {
 
-        bigBoard[bigIndex].place(row, col, player);
-        this.update();
+        Ultimate copy = deepCopy();
 
-        if (bigBoard[row*3+col].isBoardFull()){
-            boardInPlay = -1;
+        int bigIndex = move.getIndex();
+        int row = move.getRow();
+        int col = move.getCol();
+
+        copy.getBigBoard()[bigIndex].place(row, col, currentPlayer);
+        copy.update();
+
+        if (copy.getBigBoard()[row*3+col].isBoardFull()){
+            copy.setBoardInPlay(-1);
         }
         else {
-            boardInPlay = row*3+col;
+            copy.setBoardInPlay(row*3+col);
         }
 
-        return this;
+        //switch players
+        if (copy.getCurrentPlayer() == 1) {
+            copy.currentPlayer = 2;
+        } else {
+            copy.currentPlayer = 1;
+        }
+
+        return copy;
+    }
+
+    public Ultimate deepCopy() {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(this);
+            out.flush();
+            ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+            ObjectInputStream in = new ObjectInputStream(bis);
+            return (Ultimate) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Deep copy failed", e);
+        }
     }
 
     //given a certain move determine if it is possible namely
@@ -81,8 +106,8 @@ public class Ultimate {
     }
 
     //returns an arraylist of Ultimate states for each possible move that can be made from the current board state
-    public ArrayList<Ultimate> generateMoves(int player) {
-        ArrayList<Ultimate> moves = new ArrayList<Ultimate>();
+    public ArrayList<UltimateMove> getPossibleMoves() {
+        ArrayList<UltimateMove> moves = new ArrayList<>();
 
         //if any board can be played in, check them all
         if (boardInPlay == -1) {
@@ -92,7 +117,7 @@ public class Ultimate {
                     for (int row = 0; row < 3; row ++) {
                         for (int col = 0; col < 3; col ++) {
                             if (this.isMovePossible(index, row, col)) {
-                                moves.add(new Ultimate(this.getBigBoard(), index, row, col, player));
+                                moves.add(new UltimateMove(index, row, col));
                             }
                         }
                     }
@@ -103,7 +128,7 @@ public class Ultimate {
             for (int row = 0; row < 3; row ++) {
                 for (int col = 0; col < 3; col ++) {
                     if (bigBoard[boardInPlay].getBoard()[row*3+col] == 0) {
-                        moves.add(new Ultimate(this.getBigBoard(), boardInPlay, row, col, player));
+                        moves.add(new UltimateMove(boardInPlay, row, col));
                     }
                 }
             }
@@ -116,7 +141,7 @@ public class Ultimate {
     // 0 if there is no winner
     // 1 if player 1 has won
     // 2 if player 2 has won
-    public int winner() {
+    public int evaluateWinner() {
         int rowProduct = 1;
         int[] colProducts = {1, 1, 1};
         int[] diagProducts = {1, 1};
@@ -169,6 +194,12 @@ public class Ultimate {
         }
 
         return 0;
+    }
+
+    @Override
+    public boolean isTerminal() {
+        //if the winner isn't zero or if the board is full the game is terminal
+        return (this.evaluateWinner() != 0) || this.isAllFull();
     }
 
     //returns the ultimate board
@@ -253,6 +284,36 @@ public class Ultimate {
         return num;
     }
 
+    public int evaluate(int player) {
+        int eval = 0;
+
+        if (evaluateWinner() != 0) {
+            if (evaluateWinner() == player) {
+                return 10000;
+            }
+            else {
+                return -10000;
+            }
+        }
+
+        int twoMultiplier = 20;
+
+        eval += numberOfTwos(player) * twoMultiplier;
+        eval -= numberOfTwos(-player + 3) * twoMultiplier;
+
+        int threeMultiplier = 50;
+
+        eval += numberOfThrees(player) * threeMultiplier;
+        eval -= numberOfThrees(-player + 3) * threeMultiplier;
+
+        int bigTwoMultiplier = 100;
+
+        eval += numberOfBigTwos(player) * bigTwoMultiplier;
+        eval -= numberOfBigTwos(-player + 3) * bigTwoMultiplier;
+
+        return eval;
+    }
+
     //checks if all miniboards int the big board are full
     public boolean isAllFull() {
         for (int i = 0; i < bigBoard.length; i ++) {
@@ -263,22 +324,41 @@ public class Ultimate {
         return true;
     }
 
-    //stored value functions for possible transposition table functionality
-    public int getStoredValue() {
-        return storedValue;
-    }
-
-    public void setStoredValue(int storedValue) {
-        this.storedValue = storedValue;
-    }
-
-    public void setBoardInPlay(int boardInPlay) {
+    protected void setBoardInPlay(int boardInPlay) {
         this.boardInPlay = boardInPlay;
     }
 
     //returns an integer representing the board in play, -1 means there are no restrictions
     public int getBoardInPlay() {
         return boardInPlay;
+    }
+
+    @Override
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public Optional<UltimateMove> getPlayerInputMove() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf("Board of Play: %d\n", boardInPlay);
+        try {
+            int board = boardInPlay;
+            if (boardInPlay == -1) {
+                System.out.println("Enter Board Number: ");
+                board = scanner.nextInt();
+            }
+            System.out.println("Enter Row Number: ");
+            int row = scanner.nextInt();
+            System.out.println("Enter Col Number: ");
+            int col = scanner.nextInt();
+            if (isMovePossible(board, row, col)) {
+                return Optional.of(new UltimateMove(board, row, col));
+            }
+            return Optional.empty();
+        }
+        catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     //updates the miniboards based on if someone has won them or not
@@ -297,15 +377,6 @@ public class Ultimate {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Arrays.hashCode(bigBoard);
-        result = prime * result + Objects.hash(boardInPlay, storedValue);
-        return result;
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -314,7 +385,6 @@ public class Ultimate {
         if (getClass() != obj.getClass())
             return false;
         Ultimate other = (Ultimate) obj;
-        return Arrays.equals(bigBoard, other.bigBoard) && boardInPlay == other.boardInPlay
-                && storedValue == other.storedValue;
+        return Arrays.equals(bigBoard, other.bigBoard) && boardInPlay == other.boardInPlay;
     }
 }

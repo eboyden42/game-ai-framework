@@ -1,12 +1,13 @@
 package org.example;
 
+import org.example.ai.AlphaBeta;
+import org.example.ai.Minimax;
+import org.example.game.UltimateMove;
+import org.example.game.Ultimate;
+
 public class Main {
     public static void main(String[] args) {
-        //PLAYER VARIABLES
-        final boolean PLAYER_ONE_IS_REAL = true;
-        final boolean PLAYER_TWO_IS_REAL = false;
-
-        Game g = new Game(PLAYER_ONE_IS_REAL, PLAYER_TWO_IS_REAL);
-        g.play();
+        Play<UltimateMove> play = new Play<UltimateMove>(new Ultimate(), new AlphaBeta<UltimateMove>());
+        play.start();
     }
 }

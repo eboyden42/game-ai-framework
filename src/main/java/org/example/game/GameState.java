@@ -15,7 +15,8 @@ public interface GameState<M> {
     List<M> getPossibleMoves();
 
     /**
-     * Applies a move to get a new game state.
+     * Makes a deep copy of the current games state and applies a move to that game state. Return the copy.
+     * Be sure not to change the state of the current game, only the copy.
      * @param move the move to apply.
      * @return the new game state after applying the move.
      */
@@ -43,7 +44,7 @@ public interface GameState<M> {
     /**
      * Prints the state of the game to the terminal
      */
-    void printState();
+    void print();
 
     /**
      * Returns the player number of the winner. If there is no winner returns 0.

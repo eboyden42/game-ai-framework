@@ -1,11 +1,15 @@
 package org.example.game;
+import java.io.Serializable;
 import java.util.*;
 
-public class MiniBoard {
+public class MiniBoard implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private int[] board = new int[9];
     private boolean isFull = false;
-    private int winner = 0; // 1 = O and 2 = X (DON'T FORGET THIS!!!)
+    private int winner = 0; // 1 = O and 2 = X
+
 
     public static void main(String[] args) {
 
@@ -23,7 +27,7 @@ public class MiniBoard {
         this.place(row, col, player);
     }
 
-    protected MiniBoard(int[] board) { //used for testing
+    public MiniBoard(int[] board) { //used for testing
         this.board = board;
     }
 

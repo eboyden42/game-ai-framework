@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlphaBeta<M> implements SearchAlgorithm<M> {
-    //stores the score that was recorded for each move in the game
-    private ArrayList<Integer> cpuEvaluationsPerMove = new ArrayList<>();
 
     public AlphaBeta() {}
 
@@ -55,13 +53,5 @@ public class AlphaBeta<M> implements SearchAlgorithm<M> {
             }
             return value;
         }
-    }
-
-    public ArrayList<Integer> getCpuEvaluationsPerMove() {
-        return cpuEvaluationsPerMove;
-    }
-
-    public int getLatestEvaluation() {
-        return cpuEvaluationsPerMove.get(cpuEvaluationsPerMove.size()-1);
     }
 }

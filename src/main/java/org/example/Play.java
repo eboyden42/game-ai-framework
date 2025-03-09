@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class Play<M> {
+    public static final int DEPTH = 9;
     private GameState<M> gameState;
     private SearchAlgorithm<M> cpuAlgorithm;
     private Scanner scanner;
@@ -43,7 +44,7 @@ public class Play<M> {
 
     private void cpuMove() {
         System.out.println("CPU is thinking...");
-        M bestMove = cpuAlgorithm.findBestMove(gameState, 5); // Search with depth 5
+        M bestMove = cpuAlgorithm.findBestMove(gameState, DEPTH); // Search with depth 5
         System.out.println("CPU chooses move: " + bestMove);
         gameState = gameState.applyMove(bestMove);
     }

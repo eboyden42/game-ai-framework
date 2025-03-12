@@ -8,7 +8,7 @@ import org.example.game.Ultimate;
 
 public class Main {
     public static void main(String[] args) {
-        Play<UltimateMove> play = new Play<UltimateMove>(new Ultimate(), new IterativeDeepeningAlphaBeta<>(500));
+        Play<UltimateMove> play = new Play<UltimateMove>(new Ultimate(), new AlphaBeta<>());
         play.start();
     }
 }

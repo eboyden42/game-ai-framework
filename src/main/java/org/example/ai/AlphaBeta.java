@@ -8,9 +8,13 @@ import java.util.List;
 
 public class AlphaBeta<M> implements SearchAlgorithm<M> {
 
-    public AlphaBeta() {}
+    private int depth;
 
-    public M findBestMove(GameState<M> state, int depth) {
+    public AlphaBeta(int depth) {
+        this.depth = depth;
+    }
+
+    public M findBestMove(GameState<M> state) {
         List<M> possibleMoves = state.getPossibleMoves();
         int highestIndex = 0;
         int highestScore = -1000000;

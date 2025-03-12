@@ -1,4 +1,4 @@
-package org.example;
+package org.example.game;
 
 import org.example.game.MiniBoard;
 import org.junit.jupiter.api.Test;

@@ -12,16 +12,17 @@ public class IterativeDeepeningAlphaBeta<M> implements SearchAlgorithm<M> {
     }
 
     @Override
-    public M findBestMove(GameState<M> state, int maxDepth) {
+    public M findBestMove(GameState<M> state) {
         M bestMove = null;
         long startTime = System.currentTimeMillis();
-        int depth;
-        for (depth = 1; depth <= maxDepth; depth++) {
+        int depth = 1;
+        while (System.currentTimeMillis() - startTime < timeLimitMillis) {
             if (System.currentTimeMillis() - startTime >= timeLimitMillis) {
                 break; // Stop if time limit is reached
             }
 
             bestMove = depthLimitedAlphaBeta(state, depth, startTime);
+            depth ++;
         }
         System.out.printf("Max Depth Reached: %d\n", depth);
         return bestMove; // Return the best move found in time

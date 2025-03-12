@@ -5,11 +5,27 @@ import java.util.*;
 
 public class Ultimate implements GameState<UltimateMove>, Serializable {
 
+    /**
+     * The array representing the 3x3 grid of mini-boards in the Ultimate Tic-Tac-Toe game.
+     */
     private MiniBoard[] bigBoard = new MiniBoard[9];
+
+    /**
+     * Indicates which mini-board is currently in play.
+     * A value of -1 means no restriction on the board selection.
+     */
     private int boardInPlay;
+
+    /**
+     * Tracks the current player.
+     * Typically, {@code 1} represents Player 1 and {@code 2} represents Player 2.
+     */
     private int currentPlayer = 1;
 
-    //constructs a default ultimate board with board in play = -1 and each miniBoard initialized blank
+    /**
+     * Constructs a default Ultimate board.
+     * Initializes all mini-boards as blank and sets {@code boardInPlay} to -1 (no restriction).
+     */
     public Ultimate() {
         boardInPlay = -1;
         for (int i = 0; i < bigBoard.length; i ++) {
@@ -17,21 +33,30 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         }
     }
 
-    //constructs a board based on a previous board, with an additional move added
-    public Ultimate(MiniBoard[] bigBoard2, int index, int row, int col) {
+    /**
+     * Constructs an Ultimate board by copying a previous board and adding a new move.
+     *
+     * @param otherBigBoard The existing array of mini-boards to copy.
+     * @param index     The board index where the move is placed (0 to 8).
+     * @param row       The row position of the move (0 to 2).
+     * @param col       The column position of the move (0 to 2).
+     */
+    public Ultimate(MiniBoard[] otherBigBoard, int index, int row, int col) {
         boardInPlay = -1;
         for (int i = 0; i < bigBoard.length; i ++) {
             bigBoard[i] = new MiniBoard();
         }
         for (int i = 0; i < bigBoard.length; i ++) {
             for (int n = 0; n < bigBoard[0].getBoard().length; n ++) {
-                bigBoard[i].getBoard()[n] = bigBoard2[i].getBoard()[n];
+                bigBoard[i].getBoard()[n] = otherBigBoard[i].getBoard()[n];
             }
         }
         this.applyMove(new UltimateMove(index, row, col));
     }
 
-    //prints out the board to terminal
+    /**
+     * Prints the current state of the board to the terminal.
+     */
     public void print() {
         for (int start = 0; start < 9; start += 3) {
             for (int level = 0; level < 3; level ++) {
@@ -49,8 +74,12 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         }
     }
 
-    //places a piece given the bigBoard index [0, 8], and two row and col numbers both [0, 2]
-    //also updates the board in play based on the placement of the piece
+    /**
+     * Places a piece on a copy of the board, updates the board in play, switches players and returns that copy.
+     *
+     * @param move The move containing the board index [0-8], row [0-2], and column [0-2].
+     * @return A new {@code Ultimate} board reflecting the applied move.
+     */
     public Ultimate applyMove(UltimateMove move) {
 
         Ultimate copy = deepCopy();
@@ -69,7 +98,7 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
             copy.setBoardInPlay(row*3+col);
         }
 
-        //switch players
+        // Switch players
         if (copy.getCurrentPlayer() == 1) {
             copy.currentPlayer = 2;
         } else {
@@ -79,6 +108,11 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         return copy;
     }
 
+    /**
+     * Creates a deep copy of the Ultimate board using serialization.
+     *
+     * @return A new {@code Ultimate} object that is an independent copy of the original.
+     */
     public Ultimate deepCopy() {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -117,11 +151,15 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         return false;
     }
 
-    //returns an arraylist of Ultimate states for each possible move that can be made from the current board state
+    /**
+     * Generates a list of all possible moves from the current board state.
+     *
+     * @return An {@code ArrayList} of {@code UltimateMove} objects representing valid next moves.
+     */
     public ArrayList<UltimateMove> getPossibleMoves() {
         ArrayList<UltimateMove> moves = new ArrayList<>();
 
-        //if any board can be played in, check them all
+        // If any board can be played in, check them all
         if (boardInPlay == -1) {
             for (int index = 0; index < bigBoard.length; index ++) {
                 //if the board is full or there is a winner for it, do nothing
@@ -136,7 +174,7 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
                 }
             }
         }
-        else { //if the board is restricted, only search that board
+        else { // If the board is restricted, only search that board
             for (int row = 0; row < 3; row ++) {
                 for (int col = 0; col < 3; col ++) {
                     if (bigBoard[boardInPlay].getBoard()[row*3+col] == 0) {
@@ -149,11 +187,16 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         return moves;
     }
 
-    //determines if there is a winner for the game
-    // 0 if there is no winner
-    // 1 if player 1 has won
-    // 2 if player 2 has won
+    /**
+     * Evaluates the current board state to determine the winner.
+     *
+     * @return 0 if there is no winner, 1 if Player 1 has won, 2 if Player 2 has won.
+     */
     public int evaluateWinner() {
+        // This method works by calculating products.
+        // For instance, if you multiply the values of the first row and get a 1, payer 1 has won,
+        // an 8 indicates that player 2 has won, and any other number indicates no winner.
+
         int rowProduct = 1;
         int[] colProducts = {1, 1, 1};
         int[] diagProducts = {1, 1};
@@ -161,7 +204,7 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
 
         for (int i = 0; i < 9; i ++) {
 
-            //rows
+            // Checking rows
             rowProduct *= bigBoard[i].getWinner();
             if (i % 3 == 2) {
                 if (rowProduct != 0) {
@@ -175,11 +218,11 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
                 rowProduct = 1;
             }
 
-            //cols
+            // Checking columns
             colProducts[i%3] *= bigBoard[i].getWinner();
         }
 
-        //cols cont
+        // Checking columns continued
         for (int c : colProducts) {
             if (c == 8) {
                 return 2;
@@ -190,7 +233,7 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         }
 
 
-        //diags
+        // Checking diagonals
         diagProducts[0] *= bigBoard[2].getWinner() * bigBoard[4].getWinner() * bigBoard[6].getWinner();
         diagProducts[1] *= bigBoard[0].getWinner() * bigBoard[4].getWinner() * bigBoard[8].getWinner();
 
@@ -205,25 +248,47 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
             }
         }
 
+        // Otherwise return 0
         return 0;
     }
 
+    /**
+     * Checks if the game has reached a terminal state.
+     * A game is terminal if there is a winner (non-zero) or the board is full.
+     *
+     * @return {@code true} if the game is over, otherwise {@code false}.
+     */
     @Override
     public boolean isTerminal() {
-        //if the winner isn't zero or if the board is full the game is terminal
         return (this.evaluateWinner() != 0) || this.isAllFull();
     }
 
-    //returns the ultimate board
+    /**
+     * Returns the array of mini-boards representing the Ultimate board.
+     *
+     * @return The {@code MiniBoard} array representing the current state of the board.
+     */
     public MiniBoard[] getBigBoard() {
         return bigBoard;
     }
 
+    /**
+     * Retrieves the mini-board at the specified index.
+     *
+     * @param index The index of the mini-board [0 to 8].
+     * @return The {@code MiniBoard} at the given index.
+     */
     public MiniBoard getMiniBoard(int index) {
         return bigBoard[index];
     }
 
-    //sums all the numbers of open 2 in a rows for a given player over all boards
+    /**
+     * Sums the number of open 2-in-a-rows for a given player across all mini-boards.
+     * Helper method for the evaluation function.
+     *
+     * @param player The player for whom the 2-in-a-rows are counted (1 or 2).
+     * @return The total number of open 2-in-a-rows for the specified player.
+     */
     public int numberOfTwos(int player) {
         int num = 0;
         for (int i = 0; i < bigBoard.length; i ++) {
@@ -232,7 +297,13 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         return num;
     }
 
-    //sums the number of boards that a player has won so far
+    /**
+     * Sums the number of mini-boards that the specified player has won.
+     * Helper method for the evaluation function.
+     *
+     * @param player The player for whom the winning mini-boards are counted (1 or 2).
+     * @return The total number of mini-boards won by the specified player.
+     */
     public int numberOfThrees(int player) {
         int num = 0;
         for (int i = 0; i < bigBoard.length; i ++) {
@@ -243,10 +314,14 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         return num;
     }
 
-    //sums the number of open 2s that exist in the ultimate board
-    // idea: maybe use a function that determines if a player can still possibly win a board to refine this
-    // evaluation. the idea is that the winner could == 0 but there are cases where the player cannot win that
-    // board so points should not be added in this case.
+    /**
+     * Sums the number of times the specified player has won 2 mini-boards in a row on the Ultimate board,
+     * with the third mini-board still open.
+     * Helper method for the evaluation function.
+     *
+     * @param player The player for whom the open 2-in-a-row configurations are counted (1 or 2).
+     * @return The total number of 2-in-a-row configurations for the specified player across all rows of mini-boards.
+     */
     public int numberOfBigTwos(int player) {
         int num = 0;
         for (int i = 0; i < 6; i +=3) {
@@ -296,6 +371,12 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         return num;
     }
 
+    /**
+     * Evaluates the current state from the perspective of a given player.
+     *
+     * @param player the player whose perspective is considered.
+     * @return an evaluation score (higher is better for the player).
+     */
     public int evaluate(int player) {
         int eval = 0;
 
@@ -326,7 +407,11 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         return eval;
     }
 
-    //checks if all miniboards int the big board are full
+    /**
+     * Checks if all mini-boards in the Ultimate board are full.
+     *
+     * @return {@code true} if all mini-boards are full, otherwise {@code false}.
+     */
     public boolean isAllFull() {
         for (int i = 0; i < bigBoard.length; i ++) {
             if (!bigBoard[i].isBoardFull()) {
@@ -336,20 +421,44 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         return true;
     }
 
+    /**
+     * Sets the current board in play for testing purposes.
+     *
+     * @param boardInPlay The index of the mini-board to be set as the board in play (0 to 8).
+     */
     protected void setBoardInPlay(int boardInPlay) {
         this.boardInPlay = boardInPlay;
     }
 
-    //returns an integer representing the board in play, -1 means there are no restrictions
+    /**
+     * Returns the index of the board currently in play.
+     * A value of -1 means there are no restrictions on the board selection.
+     *
+     * @return The index of the board in play, or -1 if no restrictions.
+     */
     public int getBoardInPlay() {
         return boardInPlay;
     }
 
+    /**
+     * Returns the current player.
+     *
+     * @return The current player (1 or 2).
+     */
     @Override
     public int getCurrentPlayer() {
         return currentPlayer;
     }
 
+    /**
+     * Gets player input and converts it to a move. If the input of the player is not valid move, return an empty optional.
+     * Invalid moves in this case are inputs that cannot be parsed into a type M object and moves that violate the game rules
+     * at the current state of the game (using getPossibleMoves() can be useful).
+     *
+     * Getting user input should be user-friendly with descriptive yet concise directions.
+     *
+     * @return Optional<UltimateMove> type based on user input
+     */
     public Optional<UltimateMove> getPlayerInputMove() {
         Scanner scanner = new Scanner(System.in);
         System.out.printf("Board of Play: %d\n", boardInPlay);
@@ -373,7 +482,9 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         }
     }
 
-    //updates the miniboards based on if someone has won them or not
+    /**
+     * Updates the mini-boards based on whether a player has won them or not.
+     */
     public void update() {
         for (int i = 0; i < bigBoard.length; i ++) {
             int win = bigBoard[i].winner();
@@ -383,20 +494,29 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         }
     }
 
-    //wrapper to set a winner manually for one of the miniboards
-    public void setBigWinner(int board, int player) {
+    /**
+     * Sets a winner manually for a specified mini-board.
+     *
+     * @param board The index of the mini-board (0 to 8).
+     * @param player The player who is the winner (1 or 2).
+     */
+    protected void setBigWinner(int board, int player) {
         bigBoard[board].setWinner(player);
     }
 
+    /**
+     * Compares this Ultimate board with another object for equality.
+     * Two Ultimate boards are considered equal if they have the same mini-board states,
+     * the same board in play, and the same current player.
+     *
+     * @param o The object to compare this Ultimate board against.
+     * @return {@code true} if the objects are equal, {@code false} otherwise.
+     */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Ultimate other = (Ultimate) obj;
-        return Arrays.equals(bigBoard, other.bigBoard) && boardInPlay == other.boardInPlay;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ultimate ultimate = (Ultimate) o;
+        return boardInPlay == ultimate.boardInPlay && currentPlayer == ultimate.currentPlayer && Arrays.equals(bigBoard, ultimate.bigBoard);
     }
 }

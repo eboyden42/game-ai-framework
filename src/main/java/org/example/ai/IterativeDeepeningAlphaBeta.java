@@ -15,7 +15,7 @@ public class IterativeDeepeningAlphaBeta<M> implements SearchAlgorithm<M> {
     /**
      * Time limit for search in milliseconds.
      */
-    private final long timeLimitMillis; // Time limit for search in milliseconds
+    private final long timeLimitMillis;
 
     /**
      * Constructs an IterativeDeepeningAlphaBeta object with a specified time limit.

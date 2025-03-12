@@ -11,7 +11,7 @@ repositories {
 }
 
 application {
-    mainClass = 'your.package.Main'
+    mainClass = 'org.example.Main'
 }
 
 java {

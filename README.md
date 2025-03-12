@@ -19,6 +19,7 @@ To play **Ultimate Tic-Tac-Toe** using the provided AI, simply download and run 
 
 ```sh
 java -jar Ultimate.jar
+```
 
 ## Using the Framework for Your Own Game AI  
 

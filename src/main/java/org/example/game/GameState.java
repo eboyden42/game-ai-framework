@@ -10,6 +10,7 @@ public interface GameState<M> {
 
     /**
      * Gets the list of all possible moves from this state.
+     *
      * @return a list of valid moves.
      */
     List<M> getPossibleMoves();
@@ -17,6 +18,7 @@ public interface GameState<M> {
     /**
      * Makes a deep copy of the current games state and applies a move to that game state. Return the copy.
      * Be sure not to change the state of the current game, only the copy.
+     *
      * @param move the move to apply.
      * @return the new game state after applying the move.
      */
@@ -24,12 +26,14 @@ public interface GameState<M> {
 
     /**
      * Checks if the game state is terminal (game over).
+     *
      * @return true if the game is over, false otherwise.
      */
     boolean isTerminal();
 
     /**
      * Evaluates the current state from the perspective of a given player.
+     *
      * @param player the player whose perspective is considered.
      * @return an evaluation score (higher is better for the player).
      */
@@ -37,6 +41,7 @@ public interface GameState<M> {
 
     /**
      * Gets the player whose turn it is in this state.
+     *
      * @return the ID of the current player.
      */
     int getCurrentPlayer();
@@ -48,6 +53,7 @@ public interface GameState<M> {
 
     /**
      * Returns the player number of the winner. If there is no winner returns 0.
+     *
      * @return winning player number.
      */
     int evaluateWinner();

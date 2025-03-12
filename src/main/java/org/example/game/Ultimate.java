@@ -4,6 +4,12 @@ import java.io.*;
 import java.util.*;
 
 public class Ultimate implements GameState<UltimateMove>, Serializable {
+    /**
+     * This class implements the GameState interface to play the game
+     * <a href="https://en.wikipedia.org/wiki/Ultimate_tic-tac-toe">Ultimate Tic-Tac-Toe</a>.
+     *
+     * @author Eli Boyden, eboyden42
+     */
 
     /**
      * The array representing the 3x3 grid of mini-boards in the Ultimate Tic-Tac-Toe game.

@@ -3,6 +3,12 @@ package org.example.game;
 import org.example.game.Ultimate;
 
 public class UltimateMove {
+    /**
+     * POJO for storing information about a move on an Ultimate tic-tac-toe board.
+     *
+     * @author Eli Boyden, eboyden42
+     */
+
     private int index;
     private int row;
     private int col;

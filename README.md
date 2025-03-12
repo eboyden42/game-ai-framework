@@ -19,3 +19,35 @@ To play **Ultimate Tic-Tac-Toe** using the provided AI, simply download and run 
 
 ```sh
 java -jar Ultimate.jar
+
+## Using the Framework for Your Own Game AI  
+
+### 1. Implement the `GameState` Interface  
+- Choose a game you want to create an AI for.  
+- Refer to the documentation and existing implementations for guidance.  
+- **Using `Ultimate.java` as a template** may help, but your game will likely have unique mechanics.  
+
+### 2. Implement an AI Algorithm (Optional)  
+- You can implement your own `SearchAlgorithm`, or use one of the existing ones.  
+
+### 3. Write Unit Tests  
+- Ensure correctness by writing **unit tests** for your game and AI implementations.  
+
+### 4. Modify `org.example.Main`  
+- Update `org.example.Main` to pass your game and AI classes to the `Play` constructor.  
+
+### 5. Run and Play  
+- Execute the program directly or **build and run using Gradle** to play against your AI!  
+
+## Usage Examples  
+- Implement AI for **Connect-4, Checkers, Mancala, Lines and Boxes,** or even **Chess** (*challenging but fun!*)  
+- Experiment with different AI algorithms to compare their efficiency and decision-making.  
+
+## Dependencies  
+This project uses:  
+- **Gradle** for building  
+- **Maven** for dependency management  
+- **JUnit** and **Mockito** for unit testing  
+
+## Contributing  
+Contributions are welcome! If you'd like to add new AI algorithms, game implementations, or improvements to the framework, feel free to submit a pull request.  

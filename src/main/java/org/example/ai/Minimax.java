@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Minimax<M> implements SearchAlgorithm<M> {
+    /**
+     * Implements SearchAlgorithm interface using the
+     * <a href="https://en.wikipedia.org/wiki/Minimax">Minimax algorithm</a>.
+     *
+     * @author Eli Boyden, eboyden42
+     */
 
     /**
      * Indicates to what depth the minimax algorithm will search.

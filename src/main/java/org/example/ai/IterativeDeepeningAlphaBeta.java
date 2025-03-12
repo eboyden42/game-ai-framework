@@ -7,7 +7,7 @@ import java.util.List;
 public class IterativeDeepeningAlphaBeta<M> implements SearchAlgorithm<M> {
     /**
      * Implements SearchAlgorithm interface using alpha-beta minimax with
-     * <a href="">iterative deepening</a>.
+     * <a href="https://www.chessprogramming.org/Iterative_Deepening">iterative deepening</a>.
      *
      * @author Eli Boyden, eboyden42
      */
@@ -18,7 +18,7 @@ public class IterativeDeepeningAlphaBeta<M> implements SearchAlgorithm<M> {
     private final long timeLimitMillis; // Time limit for search in milliseconds
 
     /**
-     * Constructs an IterativeDeepeningAlphaBeta algorithm with a specified time limit.
+     * Constructs an IterativeDeepeningAlphaBeta object with a specified time limit.
      *
      * @param timeLimitMillis The time limit in milliseconds for the iterative deepening search.
      */

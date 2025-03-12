@@ -93,11 +93,23 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         }
     }
 
-    //given a certain move determine if it is possible namely
-    // 1. the location that the piece will be placed is in the board in play, or there is no restriction (boardInPlay) == -1
-    // 2. the location does not already have a piece placed there
+    /**
+     * Checks if a move is possible based on board constraints.
+     * A move is valid if:
+     * 1. The location is within the board in play or unrestricted ({@code boardInPlay == -1}).
+     * 2. The inputs are within valid ranges: {@code 0 <= index <= 8}, {@code 0 <= row, col <= 2}.
+     * 3. The target location is unoccupied.
+     *
+     * @param index The board index (0 to 8).
+     * @param row   The row position (0 to 2).
+     * @param col   The column position (0 to 2).
+     * @return {@code true} if the move is valid, otherwise {@code false}.
+     */
     public boolean isMovePossible(int index, int row, int col) {
-        if (index == boardInPlay || boardInPlay == -1) {
+        if (index < 0 || index > 8 || row < 0 || row > 2 || col < 0 || col > 2) { // Make sure input is valid
+            return false;
+        }
+        if (index == boardInPlay || boardInPlay == -1) { // Check if the square is already filled
             if (bigBoard[index].getBoard()[row*3+col] == 0) {
                 return true;
             }

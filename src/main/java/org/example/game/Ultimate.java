@@ -67,7 +67,7 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         for (int start = 0; start < 9; start += 3) {
             for (int level = 0; level < 3; level ++) {
                 for (int board = start; board < (start+3); board ++){
-                    bigBoard[board].printOneLine(level);
+                    bigBoard[board].printOneRow(level);
                     if (board % 3 != 2) {
                         System.out.print("|");
                     }
@@ -211,7 +211,7 @@ public class Ultimate implements GameState<UltimateMove>, Serializable {
         for (int i = 0; i < 9; i ++) {
 
             // Checking rows
-            rowProduct *= bigBoard[i].getWinner();
+            rowProduct *= bigBoard[i].winner();
             if (i % 3 == 2) {
                 if (rowProduct != 0) {
                     if (rowProduct == 8) {

@@ -18,7 +18,7 @@ public class IterativeDeepeningAlphaBeta<M> implements SearchAlgorithm<M> {
         int depth = 1;
         while (System.currentTimeMillis() - startTime < timeLimitMillis) {
             if (System.currentTimeMillis() - startTime >= timeLimitMillis) {
-                break; // Stop if time limit is reached
+                break; // Stop if the time limit is reached
             }
 
             bestMove = depthLimitedAlphaBeta(state, depth, startTime);
@@ -35,7 +35,7 @@ public class IterativeDeepeningAlphaBeta<M> implements SearchAlgorithm<M> {
         long start = System.currentTimeMillis();
         for (int i = 0; i < possibleMoves.size(); i ++) {
             if (System.currentTimeMillis() - startTime >= timeLimitMillis) {
-                break; // Stop if time limit is reached
+                break; // Stop if the time limit is reached
             }
             int score = this.alphabeta(state.applyMove(possibleMoves.get(i)), depth, -100000, 100000, false, startTime);
             if (score > highestScore) {

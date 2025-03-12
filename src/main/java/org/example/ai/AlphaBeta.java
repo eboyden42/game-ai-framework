@@ -18,7 +18,6 @@ public class AlphaBeta<M> implements SearchAlgorithm<M> {
         List<M> possibleMoves = state.getPossibleMoves();
         int highestIndex = 0;
         int highestScore = -1000000;
-        long start = System.currentTimeMillis();
         for (int i = 0; i < possibleMoves.size(); i ++) {
             int score = this.alphabeta(state.applyMove(possibleMoves.get(i)), depth, -100000, 100000, false);
             if (score > highestScore) {
@@ -31,9 +30,9 @@ public class AlphaBeta<M> implements SearchAlgorithm<M> {
 
     public int alphabeta(GameState<M> node, int depth, int alpha, int beta, boolean isMaximizingPlayer) {
         if (depth == 0 || node.isTerminal()) {
-            return node.evaluate(node.getCurrentPlayer());
+            return node.evaluate(node.getCurrentPlayer()); // If the node is terminal, return static evaluation
         }
-        if (isMaximizingPlayer) {
+        if (isMaximizingPlayer) { // Maximizing player chooses the highest value
             int value = -100000;
             List<M> possibleMoves = node.getPossibleMoves();
             for (int i = 0; i < possibleMoves.size(); i ++) {
@@ -45,7 +44,7 @@ public class AlphaBeta<M> implements SearchAlgorithm<M> {
             }
             return value;
         }
-        else {
+        else { // Minimizing player chooses the lowest value
             int value = 100000;
             List<M> possibleMoves = node.getPossibleMoves();
             for (int i = 0; i < possibleMoves.size(); i ++) {

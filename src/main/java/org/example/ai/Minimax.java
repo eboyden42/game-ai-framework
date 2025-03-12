@@ -10,13 +10,16 @@ import java.util.Scanner;
 
 public class Minimax<M> implements SearchAlgorithm<M> {
 
-    public Minimax() {}
+    private int depth;
 
-    public M findBestMove(GameState<M> state, int depth) {
+    public Minimax(int depth) {
+        this.depth = depth;
+    }
+
+    public M findBestMove(GameState<M> state) {
         List<M> possibleMoves = state.getPossibleMoves();
         int highestIndex = 0;
         int highestScore = -1000000;
-        long start = System.currentTimeMillis();
         for (int i = 0; i < possibleMoves.size(); i ++) {
             int score = this.minimax(state.applyMove(possibleMoves.get(i)), depth, false);
             if (score > highestScore) {
@@ -30,9 +33,9 @@ public class Minimax<M> implements SearchAlgorithm<M> {
 
     public int minimax(GameState<M> node, int depth, boolean isMaximizingPlayer) {
         if (depth == 0 || node.isTerminal()) {
-            return node.evaluate(node.getCurrentPlayer());
+            return node.evaluate(node.getCurrentPlayer()); // If the node is terminal, return static evaluation
         }
-        if (isMaximizingPlayer) {
+        if (isMaximizingPlayer) { // Maximizing player chooses the highest value
             int value = -100000;
             List<M> possibleMoves = node.getPossibleMoves();
             for (int i = 0; i < possibleMoves.size(); i ++) {
@@ -40,7 +43,7 @@ public class Minimax<M> implements SearchAlgorithm<M> {
             }
             return value;
         }
-        else {
+        else { // Minimizing player chooses the lowest value
             int value = 100000;
             List<M> possibleMoves = node.getPossibleMoves();
             for (int i = 0; i < possibleMoves.size(); i ++) {

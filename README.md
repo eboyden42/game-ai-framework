@@ -51,4 +51,7 @@ This project uses:
 - **JUnit** and **Mockito** for unit testing  
 
 ## Contributing  
-Contributions are welcome! If you'd like to add new AI algorithms, game implementations, or improvements to the framework, feel free to submit a pull request.  
+Contributions are welcome! If you'd like to add new AI algorithms, game implementations, or improvements to the framework, feel free to submit a pull request.
+
+## Current Issues
+Implementation of Principal Variation Search needs testing and optimization.

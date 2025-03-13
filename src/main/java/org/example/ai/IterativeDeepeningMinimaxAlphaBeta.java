@@ -4,7 +4,7 @@ import org.example.game.GameState;
 
 import java.util.List;
 
-public class IterativeDeepeningAlphaBeta<M> implements SearchAlgorithm<M> {
+public class IterativeDeepeningMinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
     /**
      * Implements SearchAlgorithm interface using alpha-beta minimax with
      * <a href="https://www.chessprogramming.org/Iterative_Deepening">iterative deepening</a>.
@@ -22,7 +22,7 @@ public class IterativeDeepeningAlphaBeta<M> implements SearchAlgorithm<M> {
      *
      * @param timeLimitMillis The time limit in milliseconds for the iterative deepening search.
      */
-    public IterativeDeepeningAlphaBeta(long timeLimitMillis) {
+    public IterativeDeepeningMinimaxAlphaBeta(long timeLimitMillis) {
         this.timeLimitMillis = timeLimitMillis;
     }
 

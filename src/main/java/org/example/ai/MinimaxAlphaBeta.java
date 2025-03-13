@@ -1,12 +1,10 @@
 package org.example.ai;
 
 import org.example.game.GameState;
-import org.example.game.Ultimate;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class AlphaBeta<M> implements SearchAlgorithm<M> {
+public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
     /**
      * Implements SearchAlgorithm interface using minimax with
      * <a href="https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning">alpha-beta pruning</a>.
@@ -24,7 +22,7 @@ public class AlphaBeta<M> implements SearchAlgorithm<M> {
      *
      * @param depth The depth for this instance of Minimax
      */
-    public AlphaBeta(int depth) {
+    public MinimaxAlphaBeta(int depth) {
         this.depth = depth;
     }
 

@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AlphaBetaTest {
+public class MinimaxAlphaBetaTest {
     MockGameState mockGameState;
-    AlphaBeta<String> alphabeta;
+    MinimaxAlphaBeta<String> alphabeta;
 
     @BeforeEach
     public void setup() {
         mockGameState = new MockGameState();
-        alphabeta = new AlphaBeta<String>(3);
+        alphabeta = new MinimaxAlphaBeta<String>(3);
     }
 
     @Test

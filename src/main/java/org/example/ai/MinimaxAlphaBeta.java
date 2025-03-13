@@ -37,7 +37,7 @@ public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
         int highestIndex = 0;
         int highestScore = -1000000;
         for (int i = 0; i < possibleMoves.size(); i ++) {
-            int score = this.alphabeta(state.applyMove(possibleMoves.get(i)), depth, -100000, 100000, false);
+            int score = this.alphabeta(state.applyMove(possibleMoves.get(i)), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
             if (score > highestScore) {
                 highestScore = score;
                 highestIndex = i;

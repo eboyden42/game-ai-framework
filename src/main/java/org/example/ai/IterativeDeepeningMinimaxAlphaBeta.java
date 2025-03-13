@@ -67,7 +67,7 @@ public class IterativeDeepeningMinimaxAlphaBeta<M> implements SearchAlgorithm<M>
             if (System.currentTimeMillis() - startTime >= timeLimitMillis) {
                 break; // Stop if the time limit is reached
             }
-            int score = this.alphabeta(node.applyMove(possibleMoves.get(i)), depth, -100000, 100000, false, startTime);
+            int score = this.alphabeta(node.applyMove(possibleMoves.get(i)), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, false, startTime);
             if (score > highestScore) {
                 highestScore = score;
                 highestIndex = i;

@@ -16,20 +16,20 @@ public class IterativeDeepeningMinimaxAlphaBetaTest {
     }
 
     @Test
-    public void testAlphaBeta() {
+    public void testFindBestMove() {
         String bestMove = iterativeDeepeningMinimaxAlphaBeta.findBestMove(mockGameState);
 
         assertEquals("A", bestMove, "Iterative Deepening Alpha Beta algorithm failed to find the best move in a mocked game scenario");
     }
 
     @Test
-    void testAlphaBetaMaximizingPlayer() {
+    void testMaximizingPlayer() {
         int score = iterativeDeepeningMinimaxAlphaBeta.alphabeta(mockGameState, 3, -100000, 100000, true, System.currentTimeMillis());
         assertEquals(10, score, "Expected score for maximizing player at depth 3");
     }
 
     @Test
-    void testAlphaBetaMinimizingPlayer() {
+    void testMinimizingPlayer() {
         int score = iterativeDeepeningMinimaxAlphaBeta.alphabeta(mockGameState, 3, -100000, 100000,false, System.currentTimeMillis());
         assertEquals(-10, score, "Expected score for minimizing player at depth 3");
     }

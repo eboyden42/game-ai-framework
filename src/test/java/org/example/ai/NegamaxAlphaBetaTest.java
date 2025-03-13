@@ -5,32 +5,32 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class NegamaxTest {
+public class NegamaxAlphaBetaTest {
     MockGameState mockGameState;
-    Negamax<String> negamax;
+    NegamaxAlphaBeta<String> negamaxAlphaBeta;
 
     @BeforeEach
     public void setup() {
         mockGameState = new MockGameState();
-        negamax = new Negamax<>(3);
+        negamaxAlphaBeta = new NegamaxAlphaBeta<>(3);
     }
 
     @Test
     public void testFindBestMove() {
-        String bestMove = negamax.findBestMove(mockGameState);
+        String bestMove = negamaxAlphaBeta.findBestMove(mockGameState);
 
         assertEquals("A", bestMove, "AlphaBeta algorithm failed to find the best move in a mocked game scenario");
     }
 
     @Test
     void testMaximizingPlayer() {
-        int score = negamax.negamax(mockGameState, 3);
+        int score = negamaxAlphaBeta.negamaxAlphaBeta(mockGameState, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
         assertEquals(10, score, "Expected score for maximizing player at depth 3");
     }
 
     @Test
     void testMinimizingPlayer() {
-        int score = -negamax.negamax(mockGameState, 3);
+        int score = -negamaxAlphaBeta.negamaxAlphaBeta(mockGameState, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
         assertEquals(-10, score, "Expected score for minimizing player at depth 3");
     }
 }

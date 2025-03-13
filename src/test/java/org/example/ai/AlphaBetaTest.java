@@ -19,7 +19,7 @@ public class AlphaBetaTest {
     public void testAlphaBeta() {
         String bestMove = alphabeta.findBestMove(mockGameState);
 
-        assertEquals("A", bestMove, "Minimax algorithm failed to find the best move in a mocked game scenario");
+        assertEquals("A", bestMove, "AlphaBeta algorithm failed to find the best move in a mocked game scenario");
     }
 
     @Test

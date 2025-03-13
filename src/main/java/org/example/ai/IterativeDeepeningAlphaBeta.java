@@ -88,7 +88,7 @@ public class IterativeDeepeningAlphaBeta<M> implements SearchAlgorithm<M> {
      * current player is the minimizing player.
      * @return The evaluation score for the current game state.
      */
-    private int alphabeta(GameState<M> node, int depth, int alpha, int beta, boolean isMaximizingPlayer, long startTime) {
+    protected int alphabeta(GameState<M> node, int depth, int alpha, int beta, boolean isMaximizingPlayer, long startTime) {
         if (System.currentTimeMillis() - startTime >= timeLimitMillis) {
             return 0; // Return neutral value if time runs out
         }

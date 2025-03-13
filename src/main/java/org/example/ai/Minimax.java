@@ -41,7 +41,7 @@ public class Minimax<M> implements SearchAlgorithm<M> {
         int highestIndex = 0;
         int highestScore = -1000000;
         for (int i = 0; i < possibleMoves.size(); i ++) {
-            int score = this.minimax(state.applyMove(possibleMoves.get(i)), depth, false);
+            int score = minimax(state.applyMove(possibleMoves.get(i)), depth, false);
             if (score > highestScore) {
                 highestScore = score;
                 highestIndex = i;

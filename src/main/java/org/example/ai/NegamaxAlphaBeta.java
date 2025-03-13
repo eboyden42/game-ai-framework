@@ -21,7 +21,7 @@ public class NegamaxAlphaBeta<M> implements SearchAlgorithm<M> {
     /**
      * Constructs an object initializing the depth.
      *
-     * @param depth The depth for this instance of Minimax
+     * @param depth The depth for this instance
      */
     public NegamaxAlphaBeta(int depth) {this.depth = depth;}
 

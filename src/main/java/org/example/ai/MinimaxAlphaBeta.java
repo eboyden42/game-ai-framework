@@ -20,7 +20,7 @@ public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
     /**
      * Constructs an AlphaBeta object initializing the depth.
      *
-     * @param depth The depth for this instance of Minimax
+     * @param depth The depth for this instance of MinimaxAlphaBeta
      */
     public MinimaxAlphaBeta(int depth) {
         this.depth = depth;

@@ -34,7 +34,7 @@ public class Negamax<M> implements SearchAlgorithm<M> {
     public M findBestMove(GameState<M> state) {
         List<M> possibleMoves = state.getPossibleMoves();
         int highestIndex = 0;
-        int highestScore = -1000000;
+        int highestScore = Integer.MIN_VALUE;
         for (int i = 0; i < possibleMoves.size(); i ++) {
             int score = -negamax(state.applyMove(possibleMoves.get(i)), depth);
             if (score > highestScore) {

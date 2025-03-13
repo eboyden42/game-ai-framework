@@ -35,7 +35,7 @@ public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
     public M findBestMove(GameState<M> state) {
         List<M> possibleMoves = state.getPossibleMoves();
         int highestIndex = 0;
-        int highestScore = -1000000;
+        int highestScore = Integer.MIN_VALUE;
         for (int i = 0; i < possibleMoves.size(); i ++) {
             int score = this.alphabeta(state.applyMove(possibleMoves.get(i)), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
             if (score > highestScore) {

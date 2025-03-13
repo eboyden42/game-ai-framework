@@ -61,7 +61,7 @@ public class IterativeDeepeningMinimaxAlphaBeta<M> implements SearchAlgorithm<M>
     private M depthLimitedAlphaBeta(GameState<M> node, int depth, long startTime) {
         List<M> possibleMoves = node.getPossibleMoves();
         int highestIndex = 0;
-        int highestScore = -1000000;
+        int highestScore = Integer.MIN_VALUE;
         long start = System.currentTimeMillis();
         for (int i = 0; i < possibleMoves.size(); i ++) {
             if (System.currentTimeMillis() - startTime >= timeLimitMillis) {

@@ -50,6 +50,8 @@ public class NegamaxAlphaBeta<M> implements SearchAlgorithm<M> {
      *
      * @param node The current game state being evaluated.
      * @param depth The maximum depth to explore in the game tree.
+     *
+     *
      * @return The evaluation score for the current game state.
      */
     public int negamaxAlphaBeta(GameState<M> node, int depth, int alpha, int beta) {

@@ -18,12 +18,25 @@ public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
     private int depth;
 
     /**
+     * The player to be used for perspective when performing static evaluations.
+     */
+    private int rootPlayer;
+
+    /**
      * Constructs an AlphaBeta object initializing the depth.
      *
      * @param depth The depth for this instance of MinimaxAlphaBeta
      */
     public MinimaxAlphaBeta(int depth) {
         this.depth = depth;
+    }
+
+    /**
+     * Set the root player for testing.
+     * @param player the player to set the rootPlayer as.
+     */
+    public void setRootPlayer(int player) {
+        rootPlayer = player;
     }
 
     /**
@@ -36,8 +49,9 @@ public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
         List<M> possibleMoves = state.getPossibleMoves();
         int highestIndex = 0;
         int highestScore = Integer.MIN_VALUE;
+        rootPlayer = state.getCurrentPlayer();
         for (int i = 0; i < possibleMoves.size(); i ++) {
-            int score = this.alphabeta(state.applyMove(possibleMoves.get(i)), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+            int score = this.alphabeta(state.applyMove(possibleMoves.get(i)), depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
             if (score > highestScore) {
                 highestScore = score;
                 highestIndex = i;
@@ -53,19 +67,17 @@ public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
      * @param depth The maximum depth to explore in the game tree.
      * @param alpha The best value that the maximizing player can guarantee so far.
      * @param beta The best value that the minimizing player can guarantee so far.
-     * @param isMaximizingPlayer {@code true} if the current player is the maximizing player, {@code false} if the
-     * current player is the minimizing player.
      * @return The evaluation score for the current game state.
      */
-    public int alphabeta(GameState<M> node, int depth, int alpha, int beta, boolean isMaximizingPlayer) {
+    public int alphabeta(GameState<M> node, int depth, int alpha, int beta) {
         if (depth == 0 || node.isTerminal()) {
-            return node.evaluate(node.getCurrentPlayer()); // If the node is terminal, return static evaluation
+            return node.evaluate(rootPlayer); // If the node is terminal, return static evaluation
         }
-        if (isMaximizingPlayer) { // Maximizing player chooses the highest value
-            int value = -100000;
+        if (rootPlayer == node.getCurrentPlayer()) { // Maximizing player chooses the highest value
+            int value = Integer.MIN_VALUE;
             List<M> possibleMoves = node.getPossibleMoves();
             for (int i = 0; i < possibleMoves.size(); i ++) {
-                value = Math.max(value, alphabeta(node.applyMove(possibleMoves.get(i)), depth-1, alpha, beta, false));
+                value = Math.max(value, alphabeta(node.applyMove(possibleMoves.get(i)), depth-1, alpha, beta));
                 alpha = Math.max(alpha, value);
                 if (alpha >= beta) {
                     break;
@@ -74,10 +86,10 @@ public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
             return value;
         }
         else { // Minimizing player chooses the lowest value
-            int value = 100000;
+            int value = Integer.MAX_VALUE;
             List<M> possibleMoves = node.getPossibleMoves();
             for (int i = 0; i < possibleMoves.size(); i ++) {
-                value = Math.min(value, alphabeta(node.applyMove(possibleMoves.get(i)), depth-1, alpha, beta, true));
+                value = Math.min(value, alphabeta(node.applyMove(possibleMoves.get(i)), depth-1, alpha, beta));
                 beta = Math.min(beta, value);
                 if (beta <= alpha) {
                     break;

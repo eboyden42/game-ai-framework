@@ -24,13 +24,16 @@ public class MinimaxAlphaBetaTest {
 
     @Test
     void testAlphaBetaMaximizingPlayer() {
-        int score = alphabeta.alphabeta(mockGameState, 3, -100000, 100000, true);
+        alphabeta.setRootPlayer(1);
+        int score = alphabeta.alphabeta(mockGameState, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
         assertEquals(10, score, "Expected score for maximizing player at depth 3");
     }
 
     @Test
     void testAlphaBetaMinimizingPlayer() {
-        int score = alphabeta.alphabeta(mockGameState, 3, -100000, 100000,false);
+        mockGameState.applyMove("C");
+        alphabeta.setRootPlayer(2);
+        int score = alphabeta.alphabeta(mockGameState, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
         assertEquals(-10, score, "Expected score for minimizing player at depth 3");
     }
 }

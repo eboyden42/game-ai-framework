@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
+import java.util.concurrent.TimeoutException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IterativeDeepeningMinimaxAlphaBetaTest {
@@ -23,7 +25,7 @@ public class IterativeDeepeningMinimaxAlphaBetaTest {
     }
 
     @Test
-    void testMaximizingPlayer() {
+    void testMaximizingPlayer() throws TimeoutException {
         MockGameState maximizingState = new MockGameState();
         iterativeDeepeningMinimaxAlphaBeta.setRootPlayer(1);
         int score = iterativeDeepeningMinimaxAlphaBeta.alphabeta(maximizingState, 3, Integer.MIN_VALUE, Integer.MAX_VALUE, System.currentTimeMillis());
@@ -31,7 +33,7 @@ public class IterativeDeepeningMinimaxAlphaBetaTest {
     }
 
     @Test
-    void testMinimizingPlayer() {
+    void testMinimizingPlayer() throws TimeoutException {
         MockGameState minimizingPlayer = new MockGameState();
         minimizingPlayer.applyMove("C");
         iterativeDeepeningMinimaxAlphaBeta.setRootPlayer(2);

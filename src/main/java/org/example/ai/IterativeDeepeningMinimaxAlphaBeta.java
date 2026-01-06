@@ -2,7 +2,9 @@ package org.example.ai;
 
 import org.example.game.GameState;
 
+import java.security.spec.ECField;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 public class IterativeDeepeningMinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
     /**
@@ -84,10 +86,14 @@ public class IterativeDeepeningMinimaxAlphaBeta<M> implements SearchAlgorithm<M>
             if (System.currentTimeMillis() - startTime >= timeLimitMillis) {
                 break; // Stop if the time limit is reached
             }
-            int score = this.alphabeta(node.applyMove(possibleMoves.get(i)), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, startTime);
-            if (score > highestScore) {
-                highestScore = score;
-                highestIndex = i;
+            try {
+                int score = this.alphabeta(node.applyMove(possibleMoves.get(i)), depth, Integer.MIN_VALUE, Integer.MAX_VALUE, startTime);
+                if (score > highestScore) {
+                    highestScore = score;
+                    highestIndex = i;
+                }
+            } catch (Exception e) {
+                // do nothing
             }
         }
         return possibleMoves.get(highestIndex);
@@ -104,9 +110,9 @@ public class IterativeDeepeningMinimaxAlphaBeta<M> implements SearchAlgorithm<M>
      * current player is the minimizing player.
      * @return The evaluation score for the current game state.
      */
-    protected int alphabeta(GameState<M> node, int depth, int alpha, int beta, long startTime) {
+    protected int alphabeta(GameState<M> node, int depth, int alpha, int beta, long startTime) throws TimeoutException {
         if (System.currentTimeMillis() - startTime >= timeLimitMillis) {
-            return node.evaluate(rootPlayer); // Return static evaluation if time runs out
+            throw new TimeoutException(); // throw exception if time runs out
         }
         if (depth == 0 || node.isTerminal()) {
             return node.evaluate(rootPlayer);

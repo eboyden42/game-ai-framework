@@ -18,19 +18,21 @@ public class MinimaxTest {
     @Test
     public void testMinimax() {
         String bestMove = minimax.findBestMove(mockGameState);
-
         assertEquals("A", bestMove, "Minimax algorithm failed to find the best move in a mocked game scenario");
     }
 
     @Test
     void testMinimaxMaximizingPlayer() {
-        int score = minimax.minimax(mockGameState, 3, true);
+        minimax.setRootPlayer(1);
+        int score = minimax.minimax(mockGameState, 3);
         assertEquals(10, score, "Expected score for maximizing player at depth 3");
     }
 
     @Test
     void testMinimaxMinimizingPlayer() {
-        int score = minimax.minimax(mockGameState, 3, false);
+        mockGameState.applyMove("C");
+        minimax.setRootPlayer(2);
+        int score = minimax.minimax(mockGameState, 3);
         assertEquals(-10, score, "Expected score for minimizing player at depth 3");
     }
 }

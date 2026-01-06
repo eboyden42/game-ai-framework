@@ -22,12 +22,25 @@ public class Minimax<M> implements SearchAlgorithm<M> {
     private int depth;
 
     /**
+     * The player to be used for perspective when performing static evaluations.
+     */
+    private int rootPlayer;
+
+    /**
      * Constructs a Minimax object initializing the depth.
      *
      * @param depth The depth for this instance of Minimax
      */
     public Minimax(int depth) {
         this.depth = depth;
+    }
+
+    /**
+     * Set the root player for testing.
+     * @param player the player to set the rootPlayer as.
+     */
+    public void setRootPlayer(int player) {
+        rootPlayer = player;
     }
 
     /**
@@ -40,8 +53,9 @@ public class Minimax<M> implements SearchAlgorithm<M> {
         List<M> possibleMoves = state.getPossibleMoves();
         int highestIndex = 0;
         int highestScore = Integer.MIN_VALUE;
+        rootPlayer = state.getCurrentPlayer();
         for (int i = 0; i < possibleMoves.size(); i ++) {
-            int score = minimax(state.applyMove(possibleMoves.get(i)), depth, false);
+            int score = minimax(state.applyMove(possibleMoves.get(i)), depth);
             if (score > highestScore) {
                 highestScore = score;
                 highestIndex = i;
@@ -55,19 +69,17 @@ public class Minimax<M> implements SearchAlgorithm<M> {
      *
      * @param node The current game state being evaluated.
      * @param depth The maximum depth to explore in the game tree.
-     * @param isMaximizingPlayer {@code true} if the current player is the maximizing player, {@code false} if the
-     * current player is the minimizing player.
      * @return The evaluation score for the current game state.
      */
-    public int minimax(GameState<M> node, int depth, boolean isMaximizingPlayer) {
+    public int minimax(GameState<M> node, int depth) {
         if (depth == 0 || node.isTerminal()) {
             return node.evaluate(node.getCurrentPlayer()); // If the node is terminal, return static evaluation
         }
-        if (isMaximizingPlayer) { // Maximizing player chooses the highest value
+        if (rootPlayer == node.getCurrentPlayer()) { // Maximizing player chooses the highest value
             int value = -100000;
             List<M> possibleMoves = node.getPossibleMoves();
             for (int i = 0; i < possibleMoves.size(); i ++) {
-                value = Math.max(value, minimax(node.applyMove(possibleMoves.get(i)), depth-1, false));
+                value = Math.max(value, minimax(node.applyMove(possibleMoves.get(i)), depth-1));
             }
             return value;
         }
@@ -75,7 +87,7 @@ public class Minimax<M> implements SearchAlgorithm<M> {
             int value = 100000;
             List<M> possibleMoves = node.getPossibleMoves();
             for (int i = 0; i < possibleMoves.size(); i ++) {
-                value = Math.min(value, minimax(node.applyMove(possibleMoves.get(i)), depth-1, true));
+                value = Math.min(value, minimax(node.applyMove(possibleMoves.get(i)), depth-1));
             }
             return value;
         }

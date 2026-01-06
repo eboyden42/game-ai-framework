@@ -41,7 +41,7 @@ java -jar Ultimate.jar
 - Execute the program directly or **build and run using Gradle** to play against your AI!  
 
 ## Usage Examples  
-- Implement AI for **Connect-4, Checkers, Mancala, Lines and Boxes,** or even **Chess** (*challenging but fun!*)  
+- Implement AI for **Connect-4, Checkers, Mancala, Lines and Boxes,** or even **Chess**
 - Experiment with different AI algorithms to compare their efficiency and decision-making.  
 
 ## Dependencies  

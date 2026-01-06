@@ -15,6 +15,7 @@ public class MockGameState implements GameState<String> {
      */
 
     private int evaluation = 0;
+    private int currentPlayer = 1;
 
     @Override
     public List<String> getPossibleMoves() {
@@ -24,14 +25,18 @@ public class MockGameState implements GameState<String> {
     @Override
     public GameState<String> applyMove(String move) {
         MockGameState newGameState = new MockGameState();
-        if (move.equals("A")){
-            newGameState.evaluation = this.evaluation+10;
-        }
-        else if (move.equals("B")) {
-            newGameState.evaluation = this.evaluation-10;
-        }
-        else {
-            newGameState.evaluation = this.evaluation;
+        newGameState.currentPlayer = (this.currentPlayer % 2) + 1;
+        newGameState.evaluation = this.evaluation;
+
+        switch (move) {
+            case "A":
+                newGameState.evaluation = 10;
+                break;
+            case "B":
+                newGameState.evaluation = -10;
+                break;
+            case "C":
+                newGameState.evaluation = 0;
         }
 
         return newGameState;
@@ -49,7 +54,7 @@ public class MockGameState implements GameState<String> {
 
     @Override
     public int getCurrentPlayer() {
-        return 0;
+        return currentPlayer;
     }
 
     @Override

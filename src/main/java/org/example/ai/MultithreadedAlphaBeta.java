@@ -2,9 +2,15 @@ package org.example.ai;
 
 import org.example.game.GameState;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
+public class MultithreadedAlphaBeta<M> implements SearchAlgorithm<M> {
     /**
      * Implements SearchAlgorithm interface using minimax with
      * <a href="https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning">alpha-beta pruning</a>.
@@ -15,7 +21,7 @@ public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
     /**
      * Indicates to what depth the algorithm will search.
      */
-    private int depth;
+    private final int depth;
 
     /**
      * The player to be used for perspective when performing static evaluations.
@@ -27,7 +33,7 @@ public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
      *
      * @param depth The depth for this instance of MinimaxAlphaBeta
      */
-    public MinimaxAlphaBeta(int depth) {
+    public MultithreadedAlphaBeta(int depth) {
         this.depth = depth;
     }
 
@@ -48,22 +54,48 @@ public class MinimaxAlphaBeta<M> implements SearchAlgorithm<M> {
     public M findBestMove(GameState<M> state) {
         long start = System.currentTimeMillis();
 
-        List<M> possibleMoves = state.getPossibleMoves();
-        int highestIndex = 0;
-        int highestScore = Integer.MIN_VALUE;
+        // set up
         rootPlayer = state.getCurrentPlayer();
-        for (int i = 0; i < possibleMoves.size(); i ++) {
-            int score = this.alphabeta(state.applyMove(possibleMoves.get(i)), depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
-            if (score > highestScore) {
-                highestScore = score;
-                highestIndex = i;
+        List<M> possibleMoves = state.getPossibleMoves();
+        int numThreads = Math.min(Runtime.getRuntime().availableProcessors(), possibleMoves.size());
+        System.out.printf("Starting thread pool with %d threads.%n", numThreads);
+        ExecutorService pool = Executors.newFixedThreadPool(numThreads);
+        List<Future<MoveResult<M>>> results = new LinkedList<Future<MoveResult<M>>>();
+
+        // fan out
+        for (int i = 0; i < possibleMoves.size(); ++i) {
+            M move = possibleMoves.get(i);
+            results.add(pool.submit(() -> runBranchSearch(state.applyMove(move), move, depth)));
+        }
+
+        // fan in
+        MoveResult<M> best = null;
+        for (Future<MoveResult<M>> future : results) {
+            try {
+                MoveResult<M> res = future.get();
+                if (best == null || best.result() < res.result()) {
+                    best = res;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Error: ", e);
+            } finally {
+                pool.shutdown();
             }
         }
 
+        // return
+        if (best == null) throw new RuntimeException("Something wrong... :(");
+        System.out.printf("Best move found with score %d.\n", best.result());
+
         long diff = System.currentTimeMillis() - start;
         System.out.printf("Computed in %d ms.\n", diff);
-        return possibleMoves.get(highestIndex);
+        return best.move();
     }
+
+    public MoveResult<M> runBranchSearch(GameState<M> state, M move, int depth) {
+        return new MoveResult<M>(move, alphabeta(state, depth, Integer.MIN_VALUE, Integer.MAX_VALUE));
+    }
+
 
     /**
      * Implements <a href="https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning">alpha-beta pruning</a> to evaluate the best move for the current player.
